@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/hako/branca"
+	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/stymsinghss/Tweety/internal/handler"
 	"github.com/stymsinghss/Tweety/internal/service"
 	"log"
@@ -43,8 +44,8 @@ func main() {
 
 	// Create server
 	addr := fmt.Sprintf(":%d", port)
+	log.Printf("🚀 Server is running on http://localhost:%d", port)
 	if err = http.ListenAndServe(addr, h); err != nil {
 		log.Fatalf("❌ Server failed: %v\n", err)
 	}
-	log.Printf("🚀 Server is running on http://localhost:%d", port)
 }
