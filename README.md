@@ -16,6 +16,7 @@ Frontend -> Vanilla JS
 |----------|----------|----------|----------|
 | Branca   | Secure alternative to JWT   | https://github.com/hako/branca   | go get -u github.com/hako/branca |
 | Pgx   | Postgres driver   | https://github.com/jackc/pgx/wiki/Getting-started-with-pgx   | go get github.com/jackc/pgx/v5 |
+| Way   | HTTP router for Go   | https://github.com/matryer/way   | go get github.com/matryer/way |
 
 
 # Database
