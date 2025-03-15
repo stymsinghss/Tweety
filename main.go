@@ -11,7 +11,6 @@ import (
 
 	"github.com/stymsinghss/Tweety/internal/handler"
 	"github.com/stymsinghss/Tweety/internal/service"
-	"github.com/stymsinghss/Tweety/internal/database"
 )
 
 const (
