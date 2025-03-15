@@ -11,6 +11,7 @@ import (
 
 	"github.com/stymsinghss/Tweety/internal/handler"
 	"github.com/stymsinghss/Tweety/internal/service"
+	"github.com/stymsinghss/Tweety/internal/database"
 )
 
 const (
@@ -34,7 +35,12 @@ func main() {
 	h := handler.New(svc)
 
 	// Start HTTP server
-	startServer(h)
+	go func() {
+		startServer(h)
+	}()
+
+	// Seed database
+	database.Seed()
 }
 
 // mustInitDB initializes and verifies the database connection.
