@@ -35,12 +35,7 @@ func main() {
 	h := handler.New(svc)
 
 	// Start HTTP server
-	go func() {
-		startServer(h)
-	}()
-
-	// Seed database
-	database.Seed()
+	startServer(h)
 }
 
 // mustInitDB initializes and verifies the database connection.

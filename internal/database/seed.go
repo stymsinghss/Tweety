@@ -37,7 +37,7 @@ func GenerateRandomUsers(count int) []User {
 func Seed() {
 	log.Println("🌱 Seeding database via API requests...")
 
-	users := GenerateRandomUsers(40) // Generate 40 users
+	users := GenerateRandomUsers(10) // Generate 40 users
 
 	for _, user := range users {
 		payload, _ := json.Marshal(user)
