@@ -46,6 +46,7 @@ func (s *Service) Login(ctx context.Context, email string) (LoginOutput, error) 
 
 	// attach tokens
 	out.Token, err = s.token.EncodeToString(strconv.FormatInt(out.AuthUser.ID, 10))
+	s.token.SetTTL(uint32(TokenLifespan.Seconds()))
 	if err != nil {
 		return out, fmt.Errorf("could not create token for the user. Failed with -> %v\n", err)
 	}
