@@ -3,49 +3,61 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"github.com/hako/branca"
-	_ "github.com/jackc/pgx/v5/stdlib"
-	"github.com/stymsinghss/Tweety/internal/handler"
-	"github.com/stymsinghss/Tweety/internal/service"
 	"log"
 	"net/http"
+
+	"github.com/hako/branca"
+	_ "github.com/jackc/pgx/v5/stdlib"
+
+	"github.com/stymsinghss/Tweety/internal/handler"
+	"github.com/stymsinghss/Tweety/internal/service"
 )
 
 const (
 	databaseURL = "postgresql://root@127.0.0.1:26257/tweety?sslmode=disable"
-	port = 3000
+	port        = 3000
+	secretKey   = "supersecretkeyyoushouldnotcommit"
 )
 
 func main() {
-	fmt.Println("Tweety")
+	fmt.Println("🚀 Tweety is starting...")
 
-	// Connect to database
-	database, err := sql.Open("pgx", databaseURL)
-	if err != nil {
-		log.Fatalf("Error connecting to database. Failed with -> %v\n", err)
-		return
-	}
-	defer database.Close()
-
-	// Ping database
-	if err = database.Ping(); err != nil {
-		log.Fatalf("Error pinging database. Failed with -> %v\n", err)
-		return
-	}
+	// Initialize database connection
+	db := mustInitDB()
+	defer db.Close()
 
 	// Setup Branca token
-	codec := branca.NewBranca("supersecretkeyyoushouldnotcommit")
+	codec := branca.NewBranca(secretKey)
 
-	// Setup service
-	svc := service.New(database, codec)
-
-	// Create handlers and pass service to it
+	// Setup service & handler
+	svc := service.New(db, codec)
 	h := handler.New(svc)
 
-	// Create server
+	// Start HTTP server
+	startServer(h)
+}
+
+// mustInitDB initializes and verifies the database connection.
+func mustInitDB() *sql.DB {
+	db, err := sql.Open("pgx", databaseURL)
+	if err != nil {
+		log.Fatalf("❌ Failed to connect to database: %v", err)
+	}
+
+	if err = db.Ping(); err != nil {
+		log.Fatalf("❌ Failed to ping database: %v", err)
+	}
+
+	log.Println("✅ Connected to database successfully!")
+	return db
+}
+
+// startServer starts the HTTP server.
+func startServer(h http.Handler) {
 	addr := fmt.Sprintf(":%d", port)
-	log.Printf("🚀 Server is running on http://localhost:%d", port)
-	if err = http.ListenAndServe(addr, h); err != nil {
-		log.Fatalf("❌ Server failed: %v\n", err)
+	log.Printf("🚀 Server is running at http://localhost%s", addr)
+
+	if err := http.ListenAndServe(addr, h); err != nil {
+		log.Fatalf("❌ Server failed: %v", err)
 	}
 }
