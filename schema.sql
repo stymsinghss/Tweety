@@ -1,0 +1,11 @@
+-- Database setup details
+DROP DATABASE IF EXISTS tweety CASCADE;
+CREATE DATABASE IF NOT EXISTS tweety;
+SET DATABASE = tweety;
+
+-- User table setup
+CREATE TABLE IF NOT EXISTS users (
+    id SERIAL NOT NULL PRIMARY KEY,
+    email VARCHAR NOT NULL UNIQUE,
+    username VARCHAR NOT NULL UNIQUE
+);
