@@ -4,8 +4,10 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/hako/branca"
+	"github.com/stymsinghss/Tweety/internal/handler"
 	"github.com/stymsinghss/Tweety/internal/service"
 	"log"
+	"net/http"
 )
 
 const (
@@ -37,4 +39,12 @@ func main() {
 	svc := service.New(database, codec)
 
 	// Create handlers and pass service to it
+	h := handler.New(svc)
+
+	// Create server
+	addr := fmt.Sprintf(":%d", port)
+	if err = http.ListenAndServe(addr, h); err != nil {
+		log.Fatalf("❌ Server failed: %v\n", err)
+	}
+	log.Printf("🚀 Server is running on http://localhost:%d", port)
 }
