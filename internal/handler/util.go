@@ -8,7 +8,7 @@ import (
 )
 
 func respond(w http.ResponseWriter, data interface{}, statusCode int) {
-	b,err := json.Marshal(data)
+	b, err := json.Marshal(data)
 	if err != nil {
 		respondInternalError(w, fmt.Errorf("could not marhal response: %v\n", err))
 		return

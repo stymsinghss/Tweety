@@ -17,9 +17,9 @@ const (
 )
 
 type LoginOutput struct {
-	Token string
+	Token     string
 	ExpiresAt time.Time
-	AuthUser User
+	AuthUser  User
 }
 
 // Login -> logins the user by checking if the email is valid and attach tokens to it

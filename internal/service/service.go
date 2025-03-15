@@ -7,7 +7,7 @@ import (
 
 // Service -> contains business logic
 type Service struct {
-	db *sql.DB
+	db    *sql.DB
 	token *branca.Branca
 }
 

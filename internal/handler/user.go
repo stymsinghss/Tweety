@@ -31,7 +31,7 @@ func (h *handler) registerUser(w http.ResponseWriter, r *http.Request) {
 		respondError(w, err, http.StatusConflict)
 		return
 	}
-	
+
 	if err != nil {
 		respondInternalError(w, err)
 		return

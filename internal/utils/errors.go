@@ -10,7 +10,6 @@ var (
 	// ErrInvalidEmail -> when email fails regex check
 	ErrInvalidEmail = errors.New("invalid email")
 
-
 	// ErrInvalidUsername -> when username fails regex check
 	ErrInvalidUsername = errors.New("invalid username")
 

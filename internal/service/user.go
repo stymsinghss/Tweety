@@ -9,7 +9,7 @@ import (
 
 // User -> represents User
 type User struct {
-	ID int64 `json:"id"`
+	ID       int64  `json:"id"`
 	Username string `json:"username"`
 }
 
