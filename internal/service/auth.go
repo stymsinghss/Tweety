@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -23,6 +24,13 @@ type LoginOutput struct {
 // Login -> logins the user by checking if the email is valid and attach tokens to it
 func (s *Service) Login(ctx context.Context, email string) (LoginOutput, error) {
 	var out LoginOutput
+
+	// Validate email
+	email = strings.TrimSpace(email)
+	if !rxEmail.MatchString(email) {
+		return out, ErrInvalidEmail
+	}
+
 	query := "SELECT id, username FROM users WHERE email = $1"
 	err := s.db.QueryRowContext(ctx, query, email).Scan(&out.AuthUser.ID, &out.AuthUser.Username)
 

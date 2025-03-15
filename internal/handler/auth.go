@@ -30,6 +30,11 @@ func (h *handler) loginUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if errors.Is(err, service.ErrInvalidEmail) {
+		respondError(w, err, http.StatusUnprocessableEntity)
+		return
+	}
+
 	if err != nil {
 		respondInternalError(w, err)
 		return
