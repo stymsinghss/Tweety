@@ -3,7 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"errors"
-	"github.com/stymsinghss/Tweety/internal/service"
+	"github.com/stymsinghss/Tweety/internal/utils"
 	"net/http"
 )
 
@@ -22,12 +22,12 @@ func (h *handler) registerUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	err := h.CreateUser(r.Context(), in.Email, in.Username)
-	if errors.Is(err, service.ErrInvalidEmail) || errors.Is(err, service.ErrInvalidUsername) {
+	if errors.Is(err, utils.ErrInvalidEmail) || errors.Is(err, utils.ErrInvalidUsername) {
 		respondError(w, err, http.StatusUnprocessableEntity)
 		return
 	}
 
-	if errors.Is(err, service.ErrEmailTaken) || errors.Is(err, service.ErrUsernameTaken) {
+	if errors.Is(err, utils.ErrEmailTaken) || errors.Is(err, utils.ErrUsernameTaken) {
 		respondError(w, err, http.StatusConflict)
 		return
 	}

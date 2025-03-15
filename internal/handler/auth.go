@@ -3,7 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"errors"
-	"github.com/stymsinghss/Tweety/internal/service"
+	"github.com/stymsinghss/Tweety/internal/utils"
 	"net/http"
 )
 
@@ -25,12 +25,12 @@ func (h *handler) loginUser(w http.ResponseWriter, r *http.Request) {
 	out, err := h.Login(r.Context(), in.Email)
 
 	// Check errors
-	if errors.Is(err, service.ErrUserNotFound) {
+	if errors.Is(err, utils.ErrUserNotFound) {
 		respondError(w, err, http.StatusNotFound)
 		return
 	}
 
-	if errors.Is(err, service.ErrInvalidEmail) {
+	if errors.Is(err, utils.ErrInvalidEmail) {
 		respondError(w, err, http.StatusUnprocessableEntity)
 		return
 	}

@@ -2,33 +2,9 @@ package service
 
 import (
 	"context"
-	"errors"
 	"fmt"
-	"regexp"
+	"github.com/stymsinghss/Tweety/internal/utils"
 	"strings"
-)
-
-var (
-	// ErrUserNotFound -> when user is not found in db
-	ErrUserNotFound = errors.New("user not found")
-	
-	// rxEmail -> regular expression for email validation
-	rxEmail = regexp.MustCompile("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")
-
-	// ErrInvalidEmail -> when email fails regex check
-	ErrInvalidEmail = errors.New("invalid email")
-
-	// rxUsername -> regular expression for username validation
-	rxUsername = regexp.MustCompile("^[a-zA-Z][[a-zA-Z0-9_-]{0,17}$")
-
-	// ErrInvalidUsername -> when username fails regex check
-	ErrInvalidUsername = errors.New("invalid username")
-
-	// ErrEmailTaken -> when email already exists
-	ErrEmailTaken = errors.New("email already exists")
-
-	// ErrUsernameTaken -> when username already exists
-	ErrUsernameTaken = errors.New("username already exists")
 )
 
 // User -> represents User
@@ -41,14 +17,14 @@ type User struct {
 func (s *Service) CreateUser(ctx context.Context, email, username string) error {
 	// Validate email
 	email = strings.TrimSpace(email)
-	if !rxEmail.MatchString(email) {
-		return ErrInvalidEmail
+	if !utils.RxEmail.MatchString(email) {
+		return utils.ErrInvalidEmail
 	}
 
 	// Validate username
 	username = strings.TrimSpace(username)
-	if !rxUsername.MatchString(username) {
-		return ErrInvalidUsername
+	if !utils.RxUsername.MatchString(username) {
+		return utils.ErrInvalidUsername
 	}
 
 	// query
@@ -57,11 +33,11 @@ func (s *Service) CreateUser(ctx context.Context, email, username string) error 
 
 	unique := IsUniqueViolation(err)
 	if unique && strings.Contains(err.Error(), "email") {
-		return ErrEmailTaken
+		return utils.ErrEmailTaken
 	}
 
 	if unique && strings.Contains(err.Error(), "username") {
-		return ErrUsernameTaken
+		return utils.ErrUsernameTaken
 	}
 
 	if err != nil {

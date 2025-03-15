@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"github.com/stymsinghss/Tweety/internal/utils"
 	"strconv"
 	"strings"
 	"time"
@@ -27,8 +28,8 @@ func (s *Service) Login(ctx context.Context, email string) (LoginOutput, error) 
 
 	// Validate email
 	email = strings.TrimSpace(email)
-	if !rxEmail.MatchString(email) {
-		return out, ErrInvalidEmail
+	if !utils.RxEmail.MatchString(email) {
+		return out, utils.ErrInvalidEmail
 	}
 
 	query := "SELECT id, username FROM users WHERE email = $1"
@@ -36,7 +37,7 @@ func (s *Service) Login(ctx context.Context, email string) (LoginOutput, error) 
 
 	// If no user found
 	if errors.Is(err, sql.ErrNoRows) {
-		return out, ErrUserNotFound
+		return out, utils.ErrUserNotFound
 	}
 
 	if err != nil {
