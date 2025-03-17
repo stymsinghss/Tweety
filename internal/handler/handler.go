@@ -19,6 +19,6 @@ func New(svc *service.Service) http.Handler {
 	api.HandleFunc("POST", "/register", handler.registerUser)
 
 	r := way.NewRouter()
-	r.Handle("*", "/api...", http.StripPrefix("/api", api))
+	r.Handle("*", "/api...", http.StripPrefix("/api", handler.withAuth(api)))
 	return r
 }
