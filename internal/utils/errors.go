@@ -18,4 +18,7 @@ var (
 
 	// ErrUsernameTaken -> when username already exists
 	ErrUsernameTaken = errors.New("username already exists")
+
+	// ErrUnauthenticated -> when there is no authenticated user in context
+	ErrUnauthenticated = errors.New("unauthenticated user")
 )

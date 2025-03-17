@@ -42,3 +42,26 @@ func (h *handler) loginUser(w http.ResponseWriter, r *http.Request) {
 
 	respond(w, out, http.StatusOK)
 }
+
+// authUser -> get authenticated user from the token
+func (h *handler) authUser(w http.ResponseWriter, r *http.Request) {
+	// Call service layer
+	user, err := h.AuthUser(r.Context())
+
+	// Check errors
+	if errors.Is(err, utils.ErrUnauthenticated) {
+		respondError(w, err, http.StatusUnauthorized)
+		return
+	}
+	if errors.Is(err, utils.ErrUserNotFound) {
+		respondError(w, err, http.StatusNotFound)
+		return
+	}
+
+	if err != nil {
+		respondInternalError(w, err)
+		return
+	}
+
+	respond(w, user, http.StatusOK)
+}

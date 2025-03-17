@@ -2,14 +2,10 @@ package handler
 
 import (
 	"context"
-	"fmt"
+	"github.com/stymsinghss/Tweety/internal/service"
 	"net/http"
 	"strings"
 )
-
-// KeyAuthUserId to use in context
-const KeyAuthUserId key = "auth_user_id"
-type key string
 
 // withAuth decodes the token and extract the user data from it
 func (h *handler) withAuth(next http.Handler) http.Handler {
@@ -33,7 +29,7 @@ func (h *handler) withAuth(next http.Handler) http.Handler {
 
 		// set user_id to context so that other routes can use it
 		ctx := r.Context()
-		ctx = context.WithValue(ctx, KeyAuthUserId, uid)
+		ctx = context.WithValue(ctx, service.KeyAuthUserId, uid)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }

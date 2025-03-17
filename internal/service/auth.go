@@ -11,9 +11,13 @@ import (
 	"time"
 )
 
+type key string
 const (
 	// TokenLifespan -> 14 days token expiry
 	TokenLifespan = time.Hour * 24 * 14
+
+	// KeyAuthUserId to use in context
+	KeyAuthUserId key = "auth_user_id"
 )
 
 type LoginOutput struct {
@@ -68,4 +72,28 @@ func (s *Service)  AuthUserId(token string) (int64, error) {
 		return 0, fmt.Errorf("could not parse userId from the token :%v/n", err)
 	}
 	return i, nil
+}
+
+
+// temporary endpoint -> to get user details from the token
+
+func (s *Service) AuthUser(ctx context.Context) (User, error) {
+	var u User
+	uid, ok := ctx.Value(KeyAuthUserId).(int64)
+	if !ok {
+		return u, utils.ErrUnauthenticated
+	}
+
+	query := "SELECT username FROM users where id = $1"
+	err := s.db.QueryRowContext(ctx, query, uid).Scan(&u.Username)
+	if errors.Is(err, sql.ErrNoRows) {
+		return u, utils.ErrUserNotFound
+	}
+
+	if err != nil {
+		return u, fmt.Errorf("could not query user. Failed with -> %v\n", err)
+	}
+
+	u.ID = uid
+	return u, nil
 }
