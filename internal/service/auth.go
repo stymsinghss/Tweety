@@ -55,3 +55,17 @@ func (s *Service) Login(ctx context.Context, email string) (LoginOutput, error) 
 	out.ExpiresAt = time.Now().Add(TokenLifespan)
 	return out, nil
 }
+
+// AuthUserId -> decoded the token and returns the userId from the token
+func (s *Service)  AuthUserId(token string) (int64, error) {
+	str, err := s.token.DecodeToString(token)
+	if err != nil {
+		return 0, fmt.Errorf("could not decode token :%v/n", err)
+	}
+
+	i, err := strconv.ParseInt(str, 10, 64)
+	if err != nil {
+		return 0, fmt.Errorf("could not parse userId from the token :%v/n", err)
+	}
+	return i, nil
+}
